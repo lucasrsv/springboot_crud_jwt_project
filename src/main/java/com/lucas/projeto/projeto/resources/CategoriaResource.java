@@ -18,12 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoriaResource {
 
     @Autowired
-    private CategoriasService service;
+    private CategoriasService categoriasService;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> find(@PathVariable Integer id) {
-        Categoria obj = service.buscar(id);
-
+        Categoria obj = categoriasService.buscar(id);
         return ResponseEntity.ok().body(obj);
     }
 }
