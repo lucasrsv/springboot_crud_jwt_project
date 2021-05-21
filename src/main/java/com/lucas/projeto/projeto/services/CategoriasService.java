@@ -1,5 +1,6 @@
 package com.lucas.projeto.projeto.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.lucas.projeto.projeto.domain.Categoria;
@@ -41,5 +42,9 @@ public class CategoriasService {
             throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos.");
         }
 
+    }
+
+    public List<Categoria> findAll() {
+        return repo.findAll();
     }
 }
