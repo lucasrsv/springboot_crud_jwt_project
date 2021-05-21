@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.lucas.projeto.projeto.domain.Categoria;
+import com.lucas.projeto.projeto.dto.CategoriaDTO;
 import com.lucas.projeto.projeto.repositories.CategoriaRepository;
 import com.lucas.projeto.projeto.services.exceptions.DataIntegrityException;
 import com.lucas.projeto.projeto.services.exceptions.ObjectNotFoundException;
@@ -54,5 +55,9 @@ public class CategoriasService {
     public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
         return repo.findAll(pageRequest);
+    }
+
+    public Categoria fromDTO(CategoriaDTO objDTO) {
+        return new Categoria(objDTO.getId(), objDTO.getNome());
     }
 }
