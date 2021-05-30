@@ -80,7 +80,7 @@ public class ProjetoApplication implements CommandLineRunner {
 		Cidade c1 = new Cidade(null, "Recife", est1);
 		Cidade c2 = new Cidade(null, "João Pessoa", est2);
 
-		Cliente cli1 = new Cliente(null, "Maria", "maria@Gmail.com", "11111111111", TipoCliente.PESSOAFISICA);
+		Cliente cli1 = new Cliente(null, "Maria", "lucasrsvalenca@gmail.com", "11111111111", TipoCliente.PESSOAFISICA);
 
 		Endereco end1 = new Endereco(null, "Rua Flores", "300", "Apt. 303", "Jardim", "33990011", cli1, c1);
 
