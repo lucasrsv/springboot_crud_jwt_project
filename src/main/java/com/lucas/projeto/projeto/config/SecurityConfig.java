@@ -3,6 +3,7 @@ package com.lucas.projeto.projeto.config;
 import java.util.Arrays;
 
 import com.lucas.projeto.projeto.security.JWTAuthenticationFilter;
+import com.lucas.projeto.projeto.security.JWTAuthorizationFilter;
 import com.lucas.projeto.projeto.security.JWTUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +40,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] PUBLIC_MATCHERS_GET = { "/produtos/**", "/categorias/**", "/clientes/**" };
 
     @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
@@ -53,7 +49,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
                 .antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    }
+
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
     @Bean
