@@ -15,6 +15,7 @@ import com.lucas.projeto.projeto.domain.PagamentoComCartao;
 import com.lucas.projeto.projeto.domain.Pedido;
 import com.lucas.projeto.projeto.domain.Produto;
 import com.lucas.projeto.projeto.domain.enums.EstadoPagamento;
+import com.lucas.projeto.projeto.domain.enums.Perfil;
 import com.lucas.projeto.projeto.domain.enums.TipoCliente;
 import com.lucas.projeto.projeto.repositories.CategoriaRepository;
 import com.lucas.projeto.projeto.repositories.CidadeRepository;
@@ -30,9 +31,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class ProjetoApplication implements CommandLineRunner {
+
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@Autowired
 	private CategoriaRepository categoriaRepository;
@@ -80,8 +85,12 @@ public class ProjetoApplication implements CommandLineRunner {
 		Cidade c1 = new Cidade(null, "Recife", est1);
 		Cidade c2 = new Cidade(null, "João Pessoa", est2);
 
-		Cliente cli1 = new Cliente(null, "Maria", "lucasrsvalenca@gmail.com", "11111111111", TipoCliente.PESSOAFISICA,
-				"123");
+		Cliente cli1 = new Cliente(null, "Maria", "lucasrsvalenca@gmail.com", "84709375020", TipoCliente.PESSOAFISICA,
+				passwordEncoder.encode("123"));
+
+		Cliente cli2 = new Cliente(null, "Luke", "lucasrdsvalenca@gmail.com", "36680036020", TipoCliente.PESSOAFISICA,
+				passwordEncoder.encode("123"));
+		cli2.addPerfil(Perfil.ADMIN);
 
 		Endereco end1 = new Endereco(null, "Rua Flores", "300", "Apt. 303", "Jardim", "33990011", cli1, c1);
 
@@ -117,6 +126,9 @@ public class ProjetoApplication implements CommandLineRunner {
 		cli1.getTelefones().addAll(Arrays.asList("33333333", "99999999"));
 		cli1.getEnderecos().addAll(Arrays.asList(end1));
 
+		cli1.getTelefones().addAll(Arrays.asList("33441111", "99999299"));
+		cli1.getEnderecos().addAll(Arrays.asList(end1));
+
 		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
 		ped2.getItens().addAll(Arrays.asList(ip3));
 
@@ -128,7 +140,7 @@ public class ProjetoApplication implements CommandLineRunner {
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2));
-		clienteRepository.saveAll(Arrays.asList(cli1));
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
 		enderecoRepository.saveAll(Arrays.asList(end1));
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pag1, pag2));

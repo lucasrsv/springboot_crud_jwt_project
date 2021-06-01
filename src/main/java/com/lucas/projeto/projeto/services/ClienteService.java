@@ -27,6 +27,7 @@ public class ClienteService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
     @Autowired
     private ClienteRepository repo;
 
