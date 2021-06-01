@@ -6,12 +6,15 @@ import java.util.Optional;
 import com.lucas.projeto.projeto.domain.Cidade;
 import com.lucas.projeto.projeto.domain.Cliente;
 import com.lucas.projeto.projeto.domain.Endereco;
+import com.lucas.projeto.projeto.domain.enums.Perfil;
 import com.lucas.projeto.projeto.domain.enums.TipoCliente;
 import com.lucas.projeto.projeto.dto.ClienteDTO;
 import com.lucas.projeto.projeto.dto.ClienteNewDTO;
 import com.lucas.projeto.projeto.repositories.CidadeRepository;
 import com.lucas.projeto.projeto.repositories.ClienteRepository;
 import com.lucas.projeto.projeto.repositories.EnderecoRepository;
+import com.lucas.projeto.projeto.security.UserSS;
+import com.lucas.projeto.projeto.services.exceptions.AuthorizationException;
 import com.lucas.projeto.projeto.services.exceptions.DataIntegrityException;
 import com.lucas.projeto.projeto.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,11 @@ public class ClienteService {
     private EnderecoRepository enderecoRepository;
 
     public Cliente find(Integer id) throws ObjectNotFoundException {
+
+        UserSS user = UserService.authenticated();
+        if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+            throw new AuthorizationException("Acesso negado.");
+        }
         Optional<Cliente> obj = repo.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException(
                 "Cliente não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
